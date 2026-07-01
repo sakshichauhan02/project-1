@@ -1,0 +1,163 @@
+================================================================================
+                       SPRINT 1 FOUNDATION DOCUMENTATION
+================================================================================
+
+1. PROJECT OBJECTIVE
+--------------------
+The objective of Sprint 1 is to build a premium, responsive, and clean frontend 
+foundation for an AI Portfolio website. It leverages Next.js 15 (App Router), 
+TypeScript, Tailwind CSS (v4), and shadcn/ui. The project focuses strictly on
+high readability, generous whitespace, and a clean typographic SaaS aesthetic
+without any decorative animations or chatbot widgets.
+
+
+2. COMPONENT ARCHITECTURE & CONNECTIONS
+----------------------------------------
+The project operates in a modular structural hierarchy where files are connected 
+as follows:
+
+                    [tsconfig.json / components.json]
+                                   │
+                                   ▼
+                             [layout.tsx]
+                                   │
+         ┌─────────────────────────┼─────────────────────────┐
+         ▼                         ▼                         ▼
+    [navbar.tsx]           [Active Route Page]          [footer.tsx]
+  (Client Component)       (App Router Pages)        (Server Component)
+         │                         │                         │
+         ├─► usePathname()         ├─► Home (/)              └─► Dynamic Year
+         ├─► Lucide Icons          ├─► AI Prototypes         └─► Minimal Credit
+         └─► shadcn Button         ├─► Technical Skills
+                                   ├─► Experience
+                                   └─► Certificates
+                                   │
+                                   ▼
+                             [globals.css]
+                   (Tailwind v4 OKLCH Slate theme)
+
+
+3. DETAILED FILE BREAKDOWN
+--------------------------
+
+--------------------------------------------------------------------------------
+File: src/app/layout.tsx
+--------------------------------------------------------------------------------
+- Objective: 
+  Defines the root layout wrapper shared across all routes in the application.
+- Logic Steps:
+  1. Imports Google Fonts (Geist and Geist Mono) to establish consistent typography.
+  2. Imports global stylesheet (`globals.css`).
+  3. Imports reusable `Navbar` and `Footer` components.
+  4. Wraps children inside a standard HTML5 structure with `<html lang="en">` and 
+     `<body>` classes: `min-h-screen flex flex-col`.
+  5. Places `<Navbar />` at the top, `<main>` in the middle (using `flex-grow` 
+     to push content), and `<Footer />` at the bottom.
+- Key Imports: `next/font/google`, `@/components/navbar`, `@/components/footer`.
+
+--------------------------------------------------------------------------------
+File: src/components/navbar.tsx
+--------------------------------------------------------------------------------
+- Objective: 
+  Provides a sticky, fully responsive navigation header with active-link 
+  highlights and an accessible mobile hamburger drawer.
+- Logic Steps:
+  1. Set as client-side (`"use client"`) to allow React state hook operations.
+  2. Uses `usePathname()` to get the current route and compare it with navigation 
+     items to apply active-link styling (solid text and bottom underline).
+  3. Defines window resize and route change event listeners to auto-collapse 
+     the mobile drawer.
+  4. Desktop layout: Flex row spacing with logo on the left and menu items on 
+     the right.
+  5. Mobile layout: Displays a hamburger icon toggler (Lucide Menu/X) using the 
+     shadcn `Button` component. It renders a clean vertical dropdown list.
+  6. Accessibility: Includes `aria-expanded`, `aria-controls`, and `id="mobile-menu"`.
+- Key Imports: `next/link`, `next/navigation`, `lucide-react`, `@/components/ui/button`.
+
+--------------------------------------------------------------------------------
+File: src/components/footer.tsx
+--------------------------------------------------------------------------------
+- Objective: 
+  Renders a lightweight, minimalist footer pinned to the bottom of the viewport.
+- Logic Steps:
+  1. Runs server-side.
+  2. Dynamically calculates the current calendar year (`new Date().getFullYear()`).
+  3. Uses responsive flex container: `flex-col` on mobile (centered) and 
+     `sm:flex-row` (space-between) on desktop.
+  4. Contains copyright attribution and a clean "Built with Next.js" credit link.
+- Key Features: Flex grid spacing, zero heavy dependencies.
+
+--------------------------------------------------------------------------------
+File: src/app/page.tsx
+--------------------------------------------------------------------------------
+- Objective: 
+  The landing/home page, designed as a premium SaaS-inspired typographic hero section.
+- Logic Steps:
+  1. Completely centers content vertically and horizontally within the viewport.
+  2. Renders a bold, large main heading: "Building Scalable AI Solutions".
+  3. Renders a neutral secondary subheading to convey the core value proposition.
+  4. Maintains generous vertical and horizontal whitespace using layout padding.
+
+--------------------------------------------------------------------------------
+Files: src/app/(ai-prototypes | technical-skills | experience | certificates)/page.tsx
+--------------------------------------------------------------------------------
+- Objective: 
+  Placeholder pages corresponding to each navbar link.
+- Logic Steps:
+  1. Each route folder (e.g. `/experience`) contains a dedicated `page.tsx` file.
+  2. Renders a basic center-aligned heading block showing the page title to 
+     confirm error-free routing.
+
+--------------------------------------------------------------------------------
+File: src/app/globals.css
+--------------------------------------------------------------------------------
+- Objective: 
+  The central styling layout layer incorporating Tailwind CSS v4 and the OKLCH theme.
+- Logic Steps:
+  1. Imports Tailwind v4 (`@import "tailwindcss"`), animation sheets, and shadcn.
+  2. Sets up a custom variant selector for dark mode.
+  3. Extends Tailwind's `@theme` config layer using custom variables.
+  4. Maps `:root` (light mode) and `.dark` (dark mode) values to the Slate OKLCH scale 
+     (using blue-gray hues like `240` and `250` degrees) for uniform layout colors.
+  5. Implements base resets using `@layer base` to configure borders and document fonts.
+
+--------------------------------------------------------------------------------
+File: src/components/ui/button.tsx
+--------------------------------------------------------------------------------
+- Objective: 
+  A reusable shadcn component primitive representing custom buttons.
+- Logic Steps:
+  1. Configures variant styles (default, outline, ghost, secondary, etc.) 
+     using the `class-variance-authority` (cva) utility.
+  2. Exports a typed React component that merges custom classes using the `cn` utility.
+
+--------------------------------------------------------------------------------
+File: src/lib/utils.ts
+--------------------------------------------------------------------------------
+- Objective: 
+  Helper module containing utility functions.
+- Logic Steps:
+  1. Imports `clsx` and `tailwind-merge` (configured for Tailwind v4 class names).
+  2. Exports the `cn()` function to dynamically combine conditional class strings.
+
+--------------------------------------------------------------------------------
+File: components.json
+--------------------------------------------------------------------------------
+- Objective: 
+  The shadcn/ui settings file that tells the CLI where files should be created.
+- Logic Steps:
+  1. Maps directory paths for imports (`@/components`, `@/lib/utils`).
+  2. Locks configuration settings like `"style": "radix-vega"` and `"baseColor": "slate"`.
+
+
+4. HOW EVERYTHING COMMUNICATES
+------------------------------
+When a route is loaded:
+1. Next.js processes `layout.tsx` which wraps the requested page component.
+2. `layout.tsx` imports and attaches the global styling variables from `globals.css`.
+3. `Navbar` reads the current URL from Next.js router APIs to correctly highlight 
+   the active page menu link.
+4. If the mobile menu button is clicked in the `Navbar`, state variables trigger 
+   the display of the vertical nav link items.
+5. All file paths resolving component queries use absolute aliases (`@/`) defined 
+   in `tsconfig.json` to keep imports modular and clean.
