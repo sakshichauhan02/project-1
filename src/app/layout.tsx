@@ -1,22 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "My personal developer portfolio and AI prototypes showcase.",
+  title: "Synapse AI Engineering Group",
+  description: "Silicon Valley's premier AI agency. We engineer agentic systems, cognitive architectures, and low-latency custom AI integrations.",
 };
 
 export default function RootLayout({
@@ -26,8 +21,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                  for (var i = 0; i < registrations.length; i++) {
+                    registrations[i].unregister().then(function(success) {
+                      if (success) console.log('Stale service worker cleared.');
+                    });
+                  }
+                });
+              }
+            `
+          }}
+        />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-background text-foreground`}
+        className={`${inter.variable} antialiased min-h-screen flex flex-col bg-background text-foreground`}
       >
         <Navbar />
         <main className="flex-grow flex flex-col">

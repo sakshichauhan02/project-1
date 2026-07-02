@@ -2,22 +2,26 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full border-t border-border bg-background py-6 mt-auto">
+    <footer className="w-full border-t border-zinc-100 bg-white py-8 mt-auto">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row text-xs sm:text-sm text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-400">
+          {/* Copyright */}
           <div>
-            &copy; {currentYear} Portfolio. All rights reserved.
+            &copy; {currentYear} Synapse AI Engineering Group. All rights reserved.
           </div>
-          <div className="flex items-center gap-1">
-            <span>Built with</span>
-            <a
-              href="https://nextjs.org"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium text-foreground hover:underline transition-all"
-            >
-              Next.js
+
+          {/* Links & Built with */}
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <a href="#" className="hover:text-zinc-950 transition-colors">
+              Privacy Policy
             </a>
+            <a href="#" className="hover:text-zinc-950 transition-colors">
+              Terms
+            </a>
+            <span className="text-zinc-300">|</span>
+            <span className="font-light">
+              Built with <span className="font-semibold text-zinc-600">Next.js</span>
+            </span>
           </div>
         </div>
       </div>
