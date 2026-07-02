@@ -1,0 +1,185 @@
+================================================================================
+                     SYNAPSE AI ENGINEERING GROUP - ARCHITECTURE SPEC
+================================================================================
+
+This document details the objective, logic, implementation, and file connectivity 
+governing the premium Next.js 15 (App Router) platform for Synapse AI.
+
+--------------------------------------------------------------------------------
+1. CORE ARCHITECTURE OVERVIEW & UX PRINCIPLES
+--------------------------------------------------------------------------------
+- Objective: Position Synapse AI as a premium, high-end AI/Automation engineering 
+  agency using modern, fast-loading, highly accessible frontend designs.
+- Core UX Constraints:
+  * Pure minimalist Light Theme (White backgrounds, border-zinc-100 dividers).
+  * Subtle blue-purple gradient accents for interactive states and highlight markers.
+  * Modern typography (Inter font family with bold oversized headings).
+  * Strict anti-gravity constraint: No floating geometric blobs, particle networks, 
+    or chatbot widgets. Clean structure relying on generous whitespace.
+  * Fully responsive layouts across all viewports.
+  * Accelerated loading speed via lazy-loading of interactive components.
+
+--------------------------------------------------------------------------------
+2. TECHNICAL SYSTEM & FILE CONNECTIVITY MATRIX
+--------------------------------------------------------------------------------
+
+[layout.tsx] ────► [navbar.tsx] & [footer.tsx] (Global Shell)
+    │
+    ├─► [page.tsx] (Home Route)
+    │      ├─► [fade-in.tsx] (Observer Animation)
+    │      ├─► (Lazy) [roi-calculator.tsx] (Savings Slider)
+    │      └─► (Lazy) [testimonial-slider.tsx] (Auto-Carousel)
+    │
+    ├─► [technical-skills/page.tsx] (Process Route)
+    │      └─► (Horizontal Step Timeline + Capability Table)
+    │
+    ├─► [ai-prototypes/page.tsx] (Prototypes Route)
+    │      └─► (Asymmetric Bento Box Layout)
+    │
+    ├─► [certificates/page.tsx] (Playbooks Route)
+    │      └─► (Masonry Grid of Technical Articles + Credentials Grid)
+    │
+    └─► [experience/page.tsx] (Case Studies Route)
+           └─► (Challenge/Solution/Impact Narrative Cases)
+
+--------------------------------------------------------------------------------
+3. FILE-BY-FILE LOGIC, OBJECTIVES, & IMPLEMENTATION DETAILS
+--------------------------------------------------------------------------------
+
+A. GLOBAL BOUNDARY & SYSTEM OVERLAYS
+-------------------------------------
+1. File: src/app/layout.tsx
+   - Objective: Define the global HTML structure, inject SEO metadata, establish 
+     the Inter font family, and handle stale browser cached module boundaries.
+   - Implementation:
+     * Integrates Inter font via `next/font/google` variables.
+     * Imports globals.css, sets metadata title/description.
+     * Injects an inline client-side `<script>` tag inside `<head>` to check for 
+       active Service Workers (`sw.js`) and unregister them. This prevents browser 
+       caching of old compilation hashes on localhost:3000, eliminating 
+       unhandled ChunkLoadErrors during active development cycles.
+   - Connections: Wraps all App Router entry routes. Mounts <Navbar />, <main>, and <Footer />.
+
+2. File: src/app/globals.css
+   - Objective: Define visual style variables, custom font utilities, and animation keyframes.
+   - Implementation:
+     * Sets pure white background variable colors, zinc text layers, and transition delays.
+     * Configures the scrolling marquee keyframes (@utility animate-marquee) that translate 
+       the element by `-50%` to loop inline vector shapes infinitely without layout jumps.
+
+B. CORE REUSABLE UX COMPONENTS
+-------------------------------
+3. File: src/components/fade-in.tsx
+   - Objective: Provide smooth, zero-dependency slide-up transition animations on scroll.
+   - Implementation:
+     * Utilizes a client-side React Hook linking an HTML div to a native browser 
+       `IntersectionObserver` instance.
+     * When elements enter the viewport, the observer triggers, appending opacity-100 
+       and translate-y-0 classes.
+     * Supports customizable transition delays (`delay={100}`, `delay={200}`) for card stagger effects.
+
+4. File: src/components/roi-calculator.tsx
+   - Objective: Provide an interactive calculator allowing prospects to estimate 
+     operational savings by automating manual tasks.
+   - Implementation:
+     * Client component containing a numeric state hooks (`hours`) ranging from 0 to 100.
+     * Employs a styled `<input type="range" />` component with inline CSS gradients that update 
+       the track progress dynamically behind the thumb.
+     * Real-time formulas:
+       - Annual Hours Saved = Hours per week * 52 weeks * 75% automation efficiency.
+       - Annual Cost Saved = Hours Saved * $85 (blended developer/operator rate).
+     * Output counters update instantly with transition animations and format outputs as currency.
+
+5. File: src/components/testimonial-slider.tsx
+   - Objective: Display client endorsements with automated transitions and minimal UI controls.
+   - Implementation:
+     * Employs a React `useEffect` hook setting a `setInterval` timer to auto-slide to the next testimonial every 5 seconds.
+     * Displays a left/right chevron control layout for manual triggers.
+     * Renders dots where the active slide is styled as a highlighted capsule (`w-3 bg-blue-600`).
+     * Includes a large, decorative quotation icon placed behind the text card.
+
+C. GLOBAL NAVIGATION ELEMENTS
+------------------------------
+6. File: src/components/navbar.tsx
+   - Objective: Render the persistent site header, active states, and mobile view selectors.
+   - Implementation:
+     * Fixed blur wrapper (`backdrop-blur-md bg-white/80 border-b border-zinc-100`) containing logo, desktop links, CTA, and menu toggles.
+     * Computes route matches dynamically using `usePathname()`. Displays a custom blue-purple 
+       gradient bottom-bar (`h-[1.5px]`) under the active link.
+     * Desktop navigation paths link: Process (/technical-skills), Prototypes (/ai-prototypes), 
+       Case Studies (/experience), and Playbooks (/certificates).
+     * Renders an email call-to-action button ("Book a Discovery Call") with hover transformations.
+     * Manages mobile overlay state toggles (`Menu`/`X` icons) with ARIA tags.
+
+7. File: src/components/footer.tsx
+   - Objective: Clean, low-footprint minimalist copyright footer.
+   - Implementation:
+     * Replaced the previous bulky multi-column menu with a clean layout containing:
+       - Left-aligned Copyright notice (`© 2026 Synapse AI Engineering Group. All rights reserved.`).
+       - Right-aligned links to Privacy Policy and Terms of Service.
+       - "Built with Next.js" text badge.
+     * Absolutely zero social icons, newsletters, or decorative background shapes.
+
+D. APP ROUTE PAGES (LANDING & INNER PATHS)
+-------------------------------------------
+8. File: src/app/page.tsx
+   - Objective: Render the primary home page, hero layout, stack marquee, and core capability highlights.
+   - Implementation:
+     * Standard `"use client"` page displaying the primary headline ("We Architect & Deploy Scalable AI Workflows.") and subheadline.
+     * Renders the **Infinite Logo Marquee** right below the Hero. Contains vector paths for 
+       Next.js, React, n8n, FastAPI, OpenAI, Gemini, Supabase, and Python. The track is styled 
+       with `flex-row flex-nowrap w-max` to ensure it never wraps. Applies hover styles 
+       `hover:[animation-play-state:paused]` to freeze scroll animations during inspects.
+     * Employs Next.js `dynamic()` lazy-loading for the interactive `RoiCalculator` and 
+       `TestimonialSlider` components, outputting animated skeleton divs during server compile 
+       to increase performance and reduce initial bundle size down to **5.67 kB**.
+
+9. File: src/app/technical-skills/page.tsx (Process)
+   - Objective: Walk visitors through the development process and capability stack.
+   - Implementation:
+     * Displays a **Horizontal Timeline** containing 4 equally spaced cards:
+       1. Discovery (System design & architecture mapping)
+       2. Engineering (Building Next.js & FastAPI backends)
+       3. Intelligence (Implementing RAG pipelines & LLM integrations)
+       4. Automation (Building n8n workflows for zero-touch systems)
+     * Desktop renders a vertical-centered connector line (`top-[46px] h-[1px] bg-zinc-100`) 
+       threading the icons. Card spacing collapses cleanly into a vertical list on mobile.
+     * Followed by the **Capabilities Matrix**: details Models & Cognitive Logic, Data Topology, 
+       Infrastructure, and Interface stacks in clean structural lists.
+
+10. File: src/app/ai-prototypes/page.tsx (Prototypes)
+    - Objective: Showcase research experiments and product sandboxes.
+    - Implementation:
+      * Built as a premium, asymmetric **Bento Box Layout** utilizing CSS grid spans 
+        (`grid-cols-1 md:grid-cols-3 gap-8`).
+      * Features 6 cards of varied shapes and sizes displaying:
+        - Unified Creator & Commerce Engine (col-span-2)
+        - NamoCRM (col-span-1)
+        - Smart Parking System (col-span-1, row-span-2 tall card displaying zone occupancy dots and capacity bar)
+        - UI Mockup (col-span-1 mockup toggle controls)
+        - Code Snippet (col-span-1 code IDE frame)
+        - Performance Metrics (col-span-2 stats display detailing latency, precision, and throughput)
+
+11. File: src/app/certificates/page.tsx (Playbooks)
+    - Objective: Present technical playbooks and authorization badges.
+    - Implementation:
+      * Features a **Masonry Grid** for technical articles compiled via CSS columns 
+        (`columns-1 md:columns-2 lg:columns-3 gap-8 mb-32` + `break-inside-avoid` wrappers).
+      * Contains 6 article playbooks with varying description lengths to create an authentic, 
+        staggered masonry flow (High Performance RAG, Scaling n8n, FastAPI, LLM Deployment, 
+        AI Workflow Patterns, Vector Database Optimization).
+      * Followed by the **Partnerships & Certifications Grid** displaying credentials from OpenAI, 
+        Anthropic, AWS, and Google Cloud with verification links.
+
+12. File: src/app/experience/page.tsx (Case Studies)
+    - Objective: Showcase detailed client case studies.
+    - Implementation:
+      * Displays an interactive list of case studies. Each project details:
+        - Challenge parameters (e.g. "Legacy operational pipelines...")
+        - Solution implemented (e.g. "Deployed LangGraph agent swarm...")
+        - Core Metrics achieved (e.g. "98.4% query accuracy", "85% overhead reduction")
+      * Clean card styling matching the minimalist zinc outline aesthetic.
+
+================================================================================
+                        END OF SPECIFICATION FILE
+================================================================================
