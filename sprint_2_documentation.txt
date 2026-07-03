@@ -1,0 +1,144 @@
+================================================================================
+                    SYNAPSE AI ENGINEERING GROUP - SPRINT 2 ARCHITECTURE
+================================================================================
+
+This document details the objective, logic, implementation, and file connectivity 
+governing the premium Framer Motion animation suite and visual enhancements 
+introduced in Sprint 2.
+
+--------------------------------------------------------------------------------
+1. MOTION ARCHITECTURE OVERVIEW & UX PRINCIPLES
+--------------------------------------------------------------------------------
+- Objective: Enhance Synapse AI's premium branding using state-of-the-art animations.
+- Core UX Constraints:
+  * High performance (GPU-accelerated, minimizing layout recalculations).
+  * Smooth easing curves (custom cubic-bezier coordinates).
+  * Zero input/scroll lag.
+  * Modular design, allowing simple drop-in reuse for buttons, cards, and text block segments.
+
+--------------------------------------------------------------------------------
+2. TECHNICAL SYSTEM & FILE CONNECTIVITY MATRIX
+--------------------------------------------------------------------------------
+
+[layout.tsx]
+    │
+    ├─► [page.tsx] (Home Route)
+    │      ├─► [character-blur-reveal.tsx] (Hero Headline staggered per character)
+    │      ├─► [border-beam.tsx] (Discovery Call button glow border)
+    │      └─► [stagger-container.tsx] & [fade-in.tsx] (Staggered scroll reveals)
+    │
+    ├─► [roi-calculator.tsx]
+    │      └─► [border-beam.tsx] (Interactive ROI container glow border)
+    │
+    ├─► [ai-prototypes/page.tsx] (Prototypes Bento Grid)
+    │      └─► [spotlight-card.tsx] (Cursor spotlight gradient cards)
+    │
+    └─► [experience/page.tsx] (Case Studies List)
+           └─► [spotlight-card.tsx] (Upgraded narrative cards with cursor spotlight)
+
+--------------------------------------------------------------------------------
+3. FILE-BY-FILE LOGIC, OBJECTIVES, & IMPLEMENTATION DETAILS
+================================================================================
+
+A. REUSABLE ANIMATION LAYER (src/components/animations/*)
+---------------------------------------------------------
+
+1. File: src/components/animations/context.tsx
+   - Objective: Coordinate stagger-propagation intervals between container wrappers and nested items.
+   - Logic Steps:
+     1. Creates a React context (`StaggerContext`) storing delay variables.
+     2. Provides context access via custom hooks so leaf components know their relative entry offsets.
+   - Implementation: Renders context providers enclosing child DOM subtrees.
+
+2. File: src/components/animations/stagger-container.tsx
+   - Objective: Coordinate delay offsets of entry animations.
+   - Logic Steps:
+     1. Wraps children inside a Framer Motion container configured with staggerChildren values.
+     2. Uses view triggers so animations fire only when the element enters the viewport.
+   - Implementation: Employs `motion.div` with viewports set to play animation only once.
+
+3. File: src/components/animations/fade-in.tsx
+   - Objective: Element-level transition wrapper replacing raw CSS scroll observers.
+   - Logic Steps:
+     1. Receives viewport configuration parameters.
+     2. Applies opacity and vertical translation transitions with premium cubic-bezier easing.
+   - Implementation: Implements custom variants translating `translateY(16px)` to `0`.
+
+4. File: src/components/animations/blur-reveal.tsx
+   - Objective: Stagger-coordinated opacity + blur filters.
+   - Logic Steps:
+     1. Sets initial state to `opacity: 0, filter: blur(12px)`.
+     2. Sets target state to `opacity: 1, filter: blur(0px)`.
+   - Implementation: Declares Framer Motion variants mapping transition coordinates.
+
+5. File: src/components/animations/character-blur-reveal.tsx
+   - Objective: Animate target sentences letter-by-letter without breaking inline text wraps.
+   - Logic Steps:
+     1. Splits sentences into word groups, and word groups into individual characters.
+     2. Wraps gradient-highlighted segments in plain `inline` wrappers to bypass Chrome/WebKit background-clip rendering boundaries.
+     3. Animates letters inside `inline-block` spans with staggered delay propagation.
+   - Implementation: Leverages hybrid word/character text structures to support gradient clipping styles.
+
+6. File: src/components/animations/spotlight-card.tsx
+   - Objective: Reusable bento-style card container displaying a cursor-tracking radial glow.
+   - Logic Steps:
+     1. Attaches mouse movement listeners (`onMouseMove`) to calculate cursor coordinates relative to the card's bounding box.
+     2. Tracks position coordinates using Framer Motion client-side `useMotionValue`.
+     3. Renders a radial gradient overlay blending blue and purple colors, styled via `useMotionTemplate`.
+     4. Sets parent container style to `overflow-hidden` to clip the cursor glow inside the card borders.
+   - Implementation: Integrates client-side listeners with absolute layers to prevent rendering lag.
+
+7. File: src/components/animations/border-beam.tsx
+   - Objective: Reusable overlay component tracing a thin gradient beam along borders.
+   - Logic Steps:
+     1. Sets up custom inline CSS properties for beam speed, thickness, and color gradients.
+     2. Configures dual linear-gradient masks using mask composite intersections (`[mask-composite:intersect]`) to hide the card body and expose only the border zone.
+     3. Animates a colored gradient circle along the border boundary using CSS motion paths (`offset-path: rect(...)`).
+   - Implementation: Uses GPU-accelerated motion paths and standard masking templates to eliminate DOM recalculations.
+
+8. File: src/components/animations/index.ts
+   - Objective: Expose barrel exports.
+   - Implementation: Re-exports all components for clean imports from `@/components/animations`.
+
+---
+
+B. INTEGRATIONS & LEGACY COMPATIBILITY LAYER
+--------------------------------------------
+
+9. File: src/components/fade-in.tsx
+   - Objective: Preserve backward compatibility with existing Sprint 1 files.
+   - Logic Steps:
+     1. Captures existing arguments (`delay`, `className`, etc.).
+     2. Automatically redirects rendering to the new Framer Motion `FadeIn` component.
+   - Implementation: Wraps inputs and delegates properties transparently.
+
+10. File: src/app/page.tsx
+    - Objective: Animate the Hero Headline and highlight call-to-action triggers.
+    - Implementation:
+      * Integrates `CharacterBlurReveal` on the headline `"We Architect & Deploy Scalable AI Workflows."`
+      * Injects `<BorderBeam />` inside the "Schedule a Discovery Call" button.
+
+11. File: src/components/roi-calculator.tsx
+    - Objective: Add premium borders to the savings calculator container.
+    - Implementation: Injects `<BorderBeam />` inside the parent card, rendering a continuous light beam path along the calculator card boundaries.
+
+12. File: src/app/ai-prototypes/page.tsx
+    - Objective: Add cursor-tracking glow to bento-box prototype cards.
+    - Implementation: Replaced the outer wrapper of all 6 cards with `<SpotlightCard />` while keeping the original grid spacing.
+
+13. File: src/app/experience/page.tsx
+    - Objective: Upgrade client narrative blocks to bento cards.
+    - Implementation: Replaced the list dividers with `<SpotlightCard />` wrappers, rendering each case study as a separate card with cursor spotlight tracking.
+
+14. File: src/app/globals.css
+    - Objective: Supply global animation keyframes.
+    - Implementation: Added the `@keyframes border-beam-move` block mapping `offset-distance` from `0%` to `100%`.
+
+--------------------------------------------------------------------------------
+4. HOW EVERYTHING COMMUNICATES
+--------------------------------------------------------------------------------
+When a page loads:
+1. Standard components (buttons/cards/text) mount their respective Framer Motion and CSS hooks.
+2. Viewport entrance triggers scroll reveals, animating elements sequentially.
+3. Mouse movements on `<SpotlightCard />` update cursor coordinates via client-side spring dynamics, rendering localized gradient lights.
+4. CSS motion-path engine traces the `<BorderBeam />` along the border path, relying on GPU layers to avoid rendering lag.
