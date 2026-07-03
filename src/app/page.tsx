@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, Cpu, Database, Blocks } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FadeIn from "@/components/fade-in";
+import { StaggerContainer, CharacterBlurReveal, BorderBeam } from "@/components/animations";
 import dynamic from "next/dynamic";
 
 const RoiCalculator = dynamic(() => import("@/components/roi-calculator"), {
@@ -108,11 +109,7 @@ export default function Home() {
             </div>
           </FadeIn>
 
-          <FadeIn delay={150}>
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-zinc-950 leading-[1.1] mb-8 font-sans">
-              We Architect & Deploy <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Scalable AI Workflows</span>.
-            </h1>
-          </FadeIn>
+          <CharacterBlurReveal className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-zinc-950 leading-[1.1] mb-8 font-sans" />
 
           <FadeIn delay={300}>
             <p className="text-lg sm:text-xl text-zinc-500 max-w-2xl leading-relaxed mb-12 font-sans font-light">
@@ -124,11 +121,12 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 asChild
-                className="h-12 rounded-full bg-zinc-950 text-white font-semibold px-8 hover:bg-zinc-900 transition-colors shadow-sm cursor-pointer"
+                className="h-12 rounded-full bg-zinc-950 text-white font-semibold px-8 hover:bg-zinc-900 transition-colors shadow-sm cursor-pointer relative overflow-hidden"
               >
                 <Link href="mailto:hello@synapse-ai.co" className="flex items-center gap-2">
                   Schedule a Discovery Call
                   <ArrowRight className="size-4" />
+                  <BorderBeam borderWidth={1.5} size={60} duration={3} />
                 </Link>
               </Button>
               <Button
@@ -201,9 +199,9 @@ export default function Home() {
           </div>
         </FadeIn>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Card 1 */}
-          <FadeIn delay={100}>
+          <FadeIn>
             <div className="group flex flex-col">
               <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 mb-6 group-hover:bg-blue-100 transition-colors">
                 <Cpu className="size-5" />
@@ -218,7 +216,7 @@ export default function Home() {
           </FadeIn>
 
           {/* Card 2 */}
-          <FadeIn delay={200}>
+          <FadeIn>
             <div className="group flex flex-col">
               <div className="h-10 w-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 mb-6 group-hover:bg-purple-100 transition-colors">
                 <Database className="size-5" />
@@ -233,7 +231,7 @@ export default function Home() {
           </FadeIn>
 
           {/* Card 3 */}
-          <FadeIn delay={300}>
+          <FadeIn>
             <div className="group flex flex-col">
               <div className="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-6 group-hover:bg-indigo-100 transition-colors">
                 <Blocks className="size-5" />
@@ -246,7 +244,7 @@ export default function Home() {
               </p>
             </div>
           </FadeIn>
-        </div>
+        </StaggerContainer>
       </section>
 
       {/* ROI Calculator Section */}

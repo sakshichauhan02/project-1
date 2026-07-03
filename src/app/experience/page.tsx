@@ -1,6 +1,7 @@
 "use client";
 
 import FadeIn from "@/components/fade-in";
+import { SpotlightCard } from "@/components/animations";
 
 const caseStudies = [
   {
@@ -54,60 +55,62 @@ export default function ExperiencePage() {
       </div>
 
       {/* Case Studies Timeline */}
-      <div className="space-y-24">
+      <div className="space-y-12">
         {caseStudies.map((study, index) => (
           <FadeIn key={study.title} delay={index * 100}>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 border-t border-zinc-100 pt-16">
-              {/* Left Column: Client & Big Metric */}
-              <div className="lg:col-span-4 flex flex-col justify-between">
-                <div>
-                  <span className="inline-flex items-center rounded-md bg-zinc-50 px-2.5 py-0.5 text-xs font-medium text-zinc-600 ring-1 ring-inset ring-zinc-500/10 mb-4">
-                    {study.client}
-                  </span>
-                  <p className="text-xs text-zinc-400 font-medium tracking-wide uppercase">
-                    Timeline: {study.duration}
-                  </p>
-                </div>
-                
-                <div className="mt-8 lg:mt-0">
-                  <div className="text-5xl sm:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 font-sans">
-                    {study.metric}
-                  </div>
-                  <p className="text-xs font-semibold text-zinc-900 uppercase tracking-widest mt-2">
-                    {study.metricLabel}
-                  </p>
-                </div>
-              </div>
-
-              {/* Right Column: Details */}
-              <div className="lg:col-span-8 space-y-6">
-                <h3 className="text-2xl font-bold tracking-tight text-zinc-950">
-                  {study.title}
-                </h3>
-                
-                <div className="space-y-4 text-sm text-zinc-500 leading-relaxed font-light">
-                  <p>
-                    <strong className="font-semibold text-zinc-950 block mb-1">The Challenge</strong>
-                    {study.challenge}
-                  </p>
-                  <p>
-                    <strong className="font-semibold text-zinc-950 block mb-1">Our Solution</strong>
-                    {study.solution}
-                  </p>
-                </div>
-
-                <div className="pt-4 flex flex-wrap gap-1.5">
-                  {study.technologies.map((t) => (
-                    <span
-                      key={t}
-                      className="inline-flex items-center rounded bg-blue-50 px-2 py-0.5 text-[10px] font-medium text-blue-700"
-                    >
-                      {t}
+            <SpotlightCard className="p-8 sm:p-12 border border-zinc-100 hover:border-zinc-200 rounded-3xl bg-white hover:shadow-sm">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+                {/* Left Column: Client & Big Metric */}
+                <div className="lg:col-span-4 flex flex-col justify-between">
+                  <div>
+                    <span className="inline-flex items-center rounded-md bg-zinc-50 px-2.5 py-0.5 text-xs font-medium text-zinc-600 ring-1 ring-inset ring-zinc-500/10 mb-4">
+                      {study.client}
                     </span>
-                  ))}
+                    <p className="text-xs text-zinc-400 font-medium tracking-wide uppercase">
+                      Timeline: {study.duration}
+                    </p>
+                  </div>
+                  
+                  <div className="mt-8 lg:mt-0">
+                    <div className="text-5xl sm:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 font-sans">
+                      {study.metric}
+                    </div>
+                    <p className="text-xs font-semibold text-zinc-900 uppercase tracking-widest mt-2">
+                      {study.metricLabel}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Column: Details */}
+                <div className="lg:col-span-8 space-y-6">
+                  <h3 className="text-2xl font-bold tracking-tight text-zinc-950">
+                    {study.title}
+                  </h3>
+                  
+                  <div className="space-y-4 text-sm text-zinc-500 leading-relaxed font-light">
+                    <p>
+                      <strong className="font-semibold text-zinc-950 block mb-1">The Challenge</strong>
+                      {study.challenge}
+                    </p>
+                    <p>
+                      <strong className="font-semibold text-zinc-950 block mb-1">Our Solution</strong>
+                      {study.solution}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 flex flex-wrap gap-1.5">
+                    {study.technologies.map((t) => (
+                      <span
+                        key={t}
+                        className="inline-flex items-center rounded bg-blue-50 px-2 py-0.5 text-[10px] font-medium text-blue-700"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            </SpotlightCard>
           </FadeIn>
         ))}
       </div>

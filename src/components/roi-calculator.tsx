@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import FadeIn from "@/components/fade-in";
+import { BorderBeam } from "@/components/animations";
 
 export default function RoiCalculator() {
   const [hours, setHours] = useState(40);
@@ -46,7 +47,8 @@ export default function RoiCalculator() {
       </FadeIn>
 
       <FadeIn delay={150}>
-        <div className="max-w-3xl mx-auto rounded-3xl border border-zinc-100 bg-white p-8 sm:p-12 shadow-sm">
+        <div className="max-w-3xl mx-auto rounded-3xl border border-zinc-100 bg-white p-8 sm:p-12 shadow-sm relative overflow-hidden">
+          <BorderBeam borderWidth={1.5} size={250} duration={8} />
           {/* Input Section */}
           <div className="space-y-6 mb-12">
             <div className="flex justify-between items-baseline">

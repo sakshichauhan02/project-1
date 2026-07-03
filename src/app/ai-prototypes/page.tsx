@@ -2,6 +2,7 @@
 
 import { Cpu, BarChart3, Settings, Database, Layers, ArrowUpRight, Code } from "lucide-react";
 import FadeIn from "@/components/fade-in";
+import { SpotlightCard } from "@/components/animations";
 
 export default function AiPrototypesPage() {
   return (
@@ -26,7 +27,7 @@ export default function AiPrototypesPage() {
         
         {/* Card 1: Unified Creator & Commerce Engine (Col Span 2, Row Span 1) */}
         <FadeIn delay={100} className="md:col-span-2">
-          <div className="relative rounded-3xl border border-zinc-100 bg-white p-8 hover:border-zinc-200 transition-all flex flex-col justify-between h-full min-h-[320px] hover:shadow-sm">
+          <SpotlightCard className="min-h-[320px]">
             <div>
               <div className="flex justify-between items-start mb-6">
                 <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
@@ -60,12 +61,12 @@ export default function AiPrototypesPage() {
                 <ArrowUpRight className="size-3.5" />
               </span>
             </div>
-          </div>
+          </SpotlightCard>
         </FadeIn>
 
         {/* Card 2: NamoCRM (Col Span 1, Row Span 1) */}
         <FadeIn delay={150}>
-          <div className="relative rounded-3xl border border-zinc-100 bg-white p-8 hover:border-zinc-200 transition-all flex flex-col justify-between h-full min-h-[320px] hover:shadow-sm">
+          <SpotlightCard className="min-h-[320px]">
             <div>
               <div className="flex justify-between items-start mb-6">
                 <div className="h-10 w-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">
@@ -90,12 +91,12 @@ export default function AiPrototypesPage() {
                 <ArrowUpRight className="size-3" />
               </span>
             </div>
-          </div>
+          </SpotlightCard>
         </FadeIn>
 
         {/* Card 3: Automated Smart Parking System (Col Span 1, Row Span 2) */}
         <FadeIn delay={200} className="md:row-span-2">
-          <div className="relative rounded-3xl border border-zinc-100 bg-white p-8 hover:border-zinc-200 transition-all flex flex-col justify-between h-full min-h-[500px] hover:shadow-sm">
+          <SpotlightCard className="min-h-[500px]">
             <div>
               <div className="flex justify-between items-start mb-6">
                 <div className="h-10 w-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
@@ -142,12 +143,12 @@ export default function AiPrototypesPage() {
                 <div className="bg-emerald-500 h-full rounded-full" style={{ width: "68%" }}></div>
               </div>
             </div>
-          </div>
+          </SpotlightCard>
         </FadeIn>
 
         {/* Card 4: UI Mockup (Col Span 1, Row Span 1) */}
         <FadeIn delay={250}>
-          <div className="relative rounded-3xl border border-zinc-100 bg-white p-8 hover:border-zinc-200 transition-all flex flex-col justify-between h-full min-h-[300px] hover:shadow-sm">
+          <SpotlightCard className="min-h-[300px]">
             <div>
               <div className="flex justify-between items-start mb-6">
                 <div className="h-10 w-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600">
@@ -175,12 +176,12 @@ export default function AiPrototypesPage() {
                 <span className="inline-flex h-4 w-8 rounded-full bg-zinc-200 relative"><span className="absolute left-0.5 top-0.5 h-3 w-3 rounded-full bg-white"></span></span>
               </div>
             </div>
-          </div>
+          </SpotlightCard>
         </FadeIn>
 
         {/* Card 5: Code Snippet (Col Span 1, Row Span 1) */}
         <FadeIn delay={300}>
-          <div className="relative rounded-3xl border border-zinc-100 bg-white p-8 hover:border-zinc-200 transition-all flex flex-col justify-between h-full min-h-[300px] hover:shadow-sm">
+          <SpotlightCard className="min-h-[300px]">
             <div>
               <div className="flex justify-between items-start mb-6">
                 <div className="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
@@ -203,12 +204,12 @@ export default function AiPrototypesPage() {
               &#125;);<br />
               <span className="text-blue-600">await</span> agent.run();
             </div>
-          </div>
+          </SpotlightCard>
         </FadeIn>
 
         {/* Card 6: Performance Metrics (Col Span 2, Row Span 1) */}
         <FadeIn delay={350} className="md:col-span-2">
-          <div className="relative rounded-3xl border border-zinc-100 bg-white p-8 hover:border-zinc-200 transition-all flex flex-col justify-between h-full min-h-[220px] hover:shadow-sm">
+          <SpotlightCard className="min-h-[220px]">
             <div>
               <div className="flex justify-between items-start mb-6">
                 <div className="h-10 w-10 rounded-xl bg-pink-50 flex items-center justify-center text-pink-600">
@@ -237,7 +238,7 @@ export default function AiPrototypesPage() {
                 <span className="text-lg sm:text-2xl font-bold text-zinc-950 font-mono">14.8k/s</span>
               </div>
             </div>
-          </div>
+          </SpotlightCard>
         </FadeIn>
 
       </div>
