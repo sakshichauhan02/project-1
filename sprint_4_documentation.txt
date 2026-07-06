@@ -1,0 +1,141 @@
+================================================================================
+                    SYNAPSE AI - SPRINT 4 DOCUMENTATION
+================================================================================
+
+1. OVERVIEW & OBJECTIVES
+--------------------------------------------------------------------------------
+The objective of Sprint 4 was to enhance visual depth, accessibility, and 
+interaction performance across the entire application while maintaining a strict 
+"Anti-Gravity" design philosophy. Key requirements included:
+  - Faint, GPU-accelerated drifting dot matrix background.
+  - Subtle, scroll-driven bento box grid parallax.
+  - Interactive syntax-highlighted console card with typing and loading states.
+  - Subtle, blurred dashboard image reveals on case studies card hovers.
+  - Native prefers-reduced-motion support to prevent vestibular discomfort.
+  - Hydration-safe components to completely eliminate Next.js warnings.
+  - Port conflict resolution and git integration.
+
+
+2. FILE MATRIX: OBJECTIVES & IMPLEMENTATIONS
+--------------------------------------------------------------------------------
+
+[NEW] src/components/animated-background.tsx
+  - Objective: Render a faint, infinite, drifting zinc-100 dot matrix background.
+  - Implementation:
+    * Uses radial gradients at a 24px grid size with 3.5% opacity (zinc-100 dots).
+    * Integrates React "mounted" state checking (useState + useEffect) to match
+      server HTML and prevent Next.js hydration mismatches.
+    * Checks useReducedMotion() from framer-motion to disable the CSS animation
+      entirely if the user has motion-reduction enabled in their system.
+
+[MODIFY] src/app/layout.tsx
+  - Objective: Mount the AnimatedBackground globally.
+  - Implementation:
+    * Imports and mounts <AnimatedBackground /> at the body root, positioning 
+      it behind all content (z-[-10] fixed inset-0 pointer-events-none).
+
+[MODIFY] src/app/globals.css
+  - Objective: Enable GPU-accelerated keyframe animation and global accessibility.
+  - Implementation:
+    * Defines `@keyframes bg-drift` translating the backdrop matrix by its exact
+      pattern size (-24px, -24px) using translate3d to offload rendering onto the 
+      GPU with zero paint/reflow overhead.
+    * Appends a global `@media (prefers-reduced-motion: reduce)` block that 
+      forces animation durations to 1ms and disables scroll transitions browser-wide.
+
+[MODIFY] src/app/ai-prototypes/page.tsx
+  - Objective: Implement bento box scroll parallax and mount the interactive console.
+  - Implementation:
+    * Attaches useScroll() to window scrollY.
+    * Uses useTransform() to map scroll coordinates to subtle vertical offsets 
+      (between -30px and +30px) that start exactly at 0px when scrollY is 0. 
+      This ensures all cards are perfectly aligned on initial load.
+    * Checks (mounted && shouldReduceMotion) to completely zero-out offsets if 
+      reduced motion is enabled, preventing hydration warnings.
+    * Replaces the static mockup code block in Card 5 with <InteractiveTerminal />.
+
+[NEW] src/components/interactive-terminal.tsx
+  - Objective: Reusable interactive macOS-style API console with loading, typing, 
+    and line-by-line syntax-highlighted JSON rendering.
+  - Implementation:
+    * State machine managing statuses: 'idle' -> 'typing' -> 'running' -> 'done'.
+    * Simulates command auto-typing (30ms interval) with a blinking block cursor.
+    * Animates loading dots during simulated API execution latency (1500ms).
+    * Prints JSON response lines one by one (120ms interval per line).
+    * Renders keys (blue), values (green), and formatting (zinc) directly via 
+      nested JSX elements, providing syntax highlighting without heavy libraries.
+    * Automatically scrolls the viewport container smoothly to the bottom using 
+      bodyRef.current.scrollTo() whenever content updates.
+
+[MODIFY] src/components/animations/spotlight-card.tsx
+  - Objective: Upgrade cards to lazy-load and render blurred dashboard previews on hover.
+  - Implementation:
+    * Integrates IntersectionObserver to only load background image assets once 
+      the card is within 200px of entering the screen viewport, optimizing mobile 
+      bandwidth and initial page speed.
+    * Applies an absolute image container that fades in smoothly (opacity-[0.045]) 
+      on hover using opacity-only transitions (transition-opacity duration-500). 
+      Scale animations were removed to prevent layout shifts or repaint reflows.
+    * Utilizes `mix-blend-multiply` and `blur-[4px]` filters to blend dashboard
+      wireframe outlines into the white card backdrops cleanly without reducing text contrast.
+
+[MODIFY] src/app/experience/page.tsx
+  - Objective: Bind mockup assets to Client case studies.
+  - Implementation:
+    * Includes `bgImage` paths in the caseStudies collection and maps them to 
+      the respective SpotlightCard instances.
+
+[MODIFY] src/app/page.tsx, /technical-skills/page.tsx, /certificates/page.tsx
+  - Objective: Solve Next.js React client manifest bundler / HMR errors.
+  - Implementation:
+    * Replaced all shared barrel imports (from "@/components/animations") with 
+      direct file path imports (e.g. "@/components/animations/spotlight-card") 
+      to bypass Next.js chunk compiler conflicts.
+
+
+3. SYSTEM CONNECTIONS & WORKFLOW FLOW
+--------------------------------------------------------------------------------
+
++-------------------------------------------------------------------------+
+|                              Root Layout                                |
+|                                                                         |
+|  +--------------------+   +------------------------------------------+  |
+|  | AnimatedBackground |   |               Main Body                  |  |
+|  | (Matrix, bg-drift) |   |                                          |  |
+|  +---------+----------+   |  +------------------------------------+  |  |
+|            |              |  |          Navigation Header         |  |  |
+|            |              |  +------------------------------------+  |  |
+|            |              |                                          |  |
+|            v              |  +------------------------------------+  |  |
+|     (GPU Drift,           |  |            Active Route            |  |  |
+|   Reduced Motion          |  |                                    |  |  |
+|    Safe Mount)            |  |  [Case Studies (/experience)]      |  |  |
+|                           |  |    - IntersectionObserver triggers |  |  |
+|                           |  |      mockup pre-fetch.             |  |  |
+|                           |  |    - Hover fades in blurred image  |  |  |
+|                           |  |      overlay.                      |  |  |
+|                           |  |                                    |  |  |
+|                           |  |  [Prototypes (/ai-prototypes)]     |  |  |
+|                           |  |    - Tracks window scrollY.        |  |  |
+|                           |  |    - Parallax translates cards     |  |  |
+|                           |  |      asynchronously.               |  |  |
+|                           |  |    - Hosts InteractiveTerminal.    |  |  |
+|                           |  +------------------------------------+  |  |
+|                           +------------------------------------------+  |
++-------------------------------------------------------------------------+
+
+
+4. ACCESSIBILITY & PERFORMANCE HIGHLIGHTS
+--------------------------------------------------------------------------------
+- Performance: Zero layout reflow triggers. Hover reveals, background drifts, 
+  and bento card transformations run strictly on composite layers (opacity, translate3d), 
+  preventing browser painting delays and locking scrolling frame rates at 60fps.
+- Vestibular Safety: Standard media queries and React hooks automatically override 
+  all animations. Under "Reduce Motion" settings:
+  * The background matrix stays completely static.
+  * Bento box grid cards remain locked in place.
+  * Fade-in slide movements are zeroed out (performing pure opacity fades).
+  * Hover image previews transition instantly without scaling.
+- Hydration-Ready: Component-level mounted checks safeguard all dynamic window-based 
+  evaluations, ensuring that Next.js compiles, prerenders, and hydratates code cleanly.
+================================================================================
