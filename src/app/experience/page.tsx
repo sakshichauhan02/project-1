@@ -1,7 +1,7 @@
 "use client";
 
 import FadeIn from "@/components/fade-in";
-import { SpotlightCard } from "@/components/animations";
+import { SpotlightCard } from "@/components/animations/spotlight-card";
 
 const caseStudies = [
   {
@@ -12,7 +12,8 @@ const caseStudies = [
     metricLabel: "Audit Time Reduced",
     challenge: "The client faced a bottleneck in auditing complex debt underwriting documents. Each compliance check took over 4 hours of manual reading, causing loan verification delays.",
     solution: "We engineered a multi-agent verification swarm using LangGraph. One agent acts as a parser, another maps compliance matrices, and a third audits decisions, producing strict schema validation outputs with structured reasoning traces.",
-    technologies: ["LangGraph", "Claude 3.5 Sonnet", "vLLM", "PostgreSQL"]
+    technologies: ["LangGraph", "Claude 3.5 Sonnet", "vLLM", "PostgreSQL"],
+    bgImage: "/compliance_audit_preview.png"
   },
   {
     title: "Sub-Second Conversational Search System",
@@ -22,7 +23,8 @@ const caseStudies = [
     metricLabel: "Annual Overhead Saved",
     challenge: "Existing retrieval pipelines averaged a 5.2s latency, causing high user drop-off rates on conversational customer support search portals.",
     solution: "We built a customized, high-throughput hybrid retrieval server in Rust. By coupling memory-mapped vector indexes with a WebSocket streaming layer, search latency was compressed, providing instant sub-second answers.",
-    technologies: ["Rust", "pgvector", "Next.js", "WebRTC Media Bridges"]
+    technologies: ["Rust", "pgvector", "Next.js", "WebRTC Media Bridges"],
+    bgImage: "/conversational_search_preview.png"
   },
   {
     title: "Knowledge Graph Integration over 10M+ Docs",
@@ -32,7 +34,8 @@ const caseStudies = [
     metricLabel: "Factual Precision Rating",
     challenge: "Researchers were unable to extract relational drug data scattered across millions of multi-format journals, PDFs, and laboratory spreadsheets.",
     solution: "We designed a GraphRAG pipeline that extracts entities, resolves co-references, and populates a Neo4j knowledge graph. A custom re-ranker maps dense coordinates with graph-hop metadata.",
-    technologies: ["Neo4j", "Qdrant Vector Database", "Apache Spark", "Llama 3 70B"]
+    technologies: ["Neo4j", "Qdrant Vector Database", "Apache Spark", "Llama 3 70B"],
+    bgImage: "/knowledge_graph_preview.png"
   }
 ];
 
@@ -58,7 +61,10 @@ export default function ExperiencePage() {
       <div className="space-y-12">
         {caseStudies.map((study, index) => (
           <FadeIn key={study.title} delay={index * 100}>
-            <SpotlightCard className="p-8 sm:p-12 border border-zinc-100 hover:border-zinc-200 rounded-3xl bg-white hover:shadow-sm">
+            <SpotlightCard 
+              bgImage={study.bgImage}
+              className="p-8 sm:p-12 border border-zinc-100 hover:border-zinc-200 rounded-3xl bg-white hover:shadow-sm"
+            >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
                 {/* Left Column: Client & Big Metric */}
                 <div className="lg:col-span-4 flex flex-col justify-between">

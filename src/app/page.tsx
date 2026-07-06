@@ -4,7 +4,9 @@ import Link from "next/link";
 import { ArrowRight, Cpu, Database, Blocks } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FadeIn from "@/components/fade-in";
-import { StaggerContainer, CharacterBlurReveal, BorderBeam } from "@/components/animations";
+import { StaggerContainer } from "@/components/animations/stagger-container";
+import { CharacterBlurReveal } from "@/components/animations/character-blur-reveal";
+import { BorderBeam } from "@/components/animations/border-beam";
 import dynamic from "next/dynamic";
 
 const RoiCalculator = dynamic(() => import("@/components/roi-calculator"), {

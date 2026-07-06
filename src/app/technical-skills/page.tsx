@@ -2,6 +2,7 @@
 
 import { Cpu, Database, Network, LayoutTemplate, Search, Code, Brain, Zap } from "lucide-react";
 import FadeIn from "@/components/fade-in";
+import { SpotlightCard } from "@/components/animations/spotlight-card";
 
 const steps = [
   {
@@ -101,7 +102,7 @@ export default function TechnicalSkillsPage() {
             const StepIcon = step.icon;
             return (
               <FadeIn key={step.title} delay={index * 100}>
-                <div className="relative flex flex-col items-start bg-white rounded-2xl border border-zinc-100 p-6 sm:p-8 hover:border-zinc-200 hover:shadow-sm transition-all duration-300 h-full group">
+                <SpotlightCard className="p-6 sm:p-8 rounded-2xl">
                   {/* Step Header */}
                   <div className="flex items-center justify-between w-full mb-6">
                     <div className="h-11 w-11 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-100 transition-colors">
@@ -119,7 +120,7 @@ export default function TechnicalSkillsPage() {
                   <p className="text-xs text-zinc-500 leading-relaxed font-light">
                     {step.description}
                   </p>
-                </div>
+                </SpotlightCard>
               </FadeIn>
             );
           })}

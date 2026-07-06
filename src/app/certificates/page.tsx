@@ -2,6 +2,7 @@
 
 import { ShieldCheck, Award, ArrowUpRight, BookOpen } from "lucide-react";
 import FadeIn from "@/components/fade-in";
+import { SpotlightCard } from "@/components/animations/spotlight-card";
 
 const playbooks = [
   {
@@ -93,29 +94,29 @@ export default function CertificatesPage() {
       <div className="columns-1 md:columns-2 lg:columns-3 gap-8 [column-fill:_balance] box-border w-full mb-32">
         {playbooks.map((art, index) => (
           <FadeIn key={art.title} delay={index * 100}>
-            <div className="break-inside-avoid mb-8 bg-white border border-zinc-100 rounded-2xl p-6 hover:border-zinc-200 transition-all flex flex-col justify-between hover:shadow-sm group">
-              <div>
-                <div className="flex justify-between items-center mb-6">
-                  <div className="h-9 w-9 rounded-lg bg-zinc-50 flex items-center justify-center text-zinc-400 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                    <BookOpen className="size-4.5" />
+              <SpotlightCard className="p-6 break-inside-avoid mb-8 rounded-2xl">
+                <div>
+                  <div className="flex justify-between items-center mb-6">
+                    <div className="h-9 w-9 rounded-lg bg-zinc-50 flex items-center justify-center text-zinc-400 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                      <BookOpen className="size-4.5" />
+                    </div>
+                    <span className="text-[10px] font-mono text-zinc-400 font-semibold uppercase tracking-wider">
+                      {art.readTime}
+                    </span>
                   </div>
-                  <span className="text-[10px] font-mono text-zinc-400 font-semibold uppercase tracking-wider">
-                    {art.readTime}
-                  </span>
+                  <h3 className="text-base font-bold text-zinc-950 mb-2 leading-snug group-hover:text-blue-600 transition-colors">
+                    {art.title}
+                  </h3>
+                  <p className="text-xs text-zinc-500 leading-relaxed font-light">
+                    {art.description}
+                  </p>
                 </div>
-                <h3 className="text-base font-bold text-zinc-950 mb-2 leading-snug group-hover:text-blue-600 transition-colors">
-                  {art.title}
-                </h3>
-                <p className="text-xs text-zinc-500 leading-relaxed font-light">
-                  {art.description}
-                </p>
-              </div>
-              
-              <div className="border-t border-zinc-50 pt-4 mt-6 flex justify-between items-center text-xs font-semibold text-zinc-900">
-                <span className="group-hover:text-blue-600 transition-colors">Read Playbook</span>
-                <ArrowUpRight className="size-4 text-zinc-300 group-hover:text-blue-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-              </div>
-            </div>
+                
+                <div className="border-t border-zinc-50 pt-4 mt-6 flex justify-between items-center text-xs font-semibold text-zinc-900">
+                  <span className="group-hover:text-blue-600 transition-colors">Read Playbook</span>
+                  <ArrowUpRight className="size-4 text-zinc-300 group-hover:text-blue-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                </div>
+              </SpotlightCard>
           </FadeIn>
         ))}
       </div>
@@ -139,45 +140,45 @@ export default function CertificatesPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         {credentials.map((cred, index) => (
           <FadeIn key={cred.title} delay={index * 100}>
-            <div className="group relative rounded-2xl border border-zinc-100 bg-white p-6 sm:p-8 hover:border-zinc-200 transition-all flex flex-col h-full hover:shadow-sm">
-              {/* Top Section */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
-                  {cred.type === "Partnership" ? (
-                    <ShieldCheck className="size-5" />
-                  ) : (
-                    <Award className="size-5" />
-                  )}
+              <SpotlightCard className="p-6 sm:p-8 rounded-2xl">
+                {/* Top Section */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                    {cred.type === "Partnership" ? (
+                      <ShieldCheck className="size-5" />
+                    ) : (
+                      <Award className="size-5" />
+                    )}
+                  </div>
+                  <span className="inline-flex items-center rounded bg-zinc-50 px-2 py-0.5 text-[10px] font-medium text-zinc-500 uppercase tracking-wider">
+                    {cred.type}
+                  </span>
                 </div>
-                <span className="inline-flex items-center rounded bg-zinc-50 px-2 py-0.5 text-[10px] font-medium text-zinc-500 uppercase tracking-wider">
-                  {cred.type}
-                </span>
-              </div>
 
-              {/* Body */}
-              <div className="flex-grow mb-6">
-                <h3 className="text-lg font-bold text-zinc-950 mb-1 leading-snug group-hover:text-blue-600 transition-colors">
-                  {cred.title}
-                </h3>
-                <p className="text-xs font-semibold text-zinc-400 mb-4 uppercase tracking-wider">
-                  {cred.organization} &bull; {cred.date}
-                </p>
-                <p className="text-sm text-zinc-500 leading-relaxed font-light">
-                  {cred.description}
-                </p>
-              </div>
+                {/* Body */}
+                <div className="flex-grow mb-6">
+                  <h3 className="text-lg font-bold text-zinc-950 mb-1 leading-snug group-hover:text-blue-600 transition-colors">
+                    {cred.title}
+                  </h3>
+                  <p className="text-xs font-semibold text-zinc-400 mb-4 uppercase tracking-wider">
+                    {cred.organization} &bull; {cred.date}
+                  </p>
+                  <p className="text-sm text-zinc-500 leading-relaxed font-light">
+                    {cred.description}
+                  </p>
+                </div>
 
-              {/* ID & Verification */}
-              <div className="mt-auto border-t border-zinc-50 pt-4 flex items-center justify-between text-xs">
-                <span className="text-zinc-400 font-mono">
-                  Credential ID: {cred.id}
-                </span>
-                <span className="inline-flex items-center gap-1 font-semibold text-zinc-900 group-hover:text-blue-600 transition-colors cursor-pointer">
-                  Verify credential
-                  <ArrowUpRight className="size-3.5 text-zinc-300 group-hover:text-blue-600 transition-colors" />
-                </span>
-              </div>
-            </div>
+                {/* ID & Verification */}
+                <div className="mt-auto border-t border-zinc-50 pt-4 flex items-center justify-between text-xs">
+                  <span className="text-zinc-400 font-mono">
+                    Credential ID: {cred.id}
+                  </span>
+                  <span className="inline-flex items-center gap-1 font-semibold text-zinc-900 group-hover:text-blue-600 transition-colors cursor-pointer">
+                    Verify credential
+                    <ArrowUpRight className="size-3.5 text-zinc-300 group-hover:text-blue-600 transition-colors" />
+                  </span>
+                </div>
+              </SpotlightCard>
           </FadeIn>
         ))}
       </div>

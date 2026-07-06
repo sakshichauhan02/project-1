@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { motion, HTMLMotionProps } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, HTMLMotionProps, useReducedMotion } from "framer-motion";
 import { useStagger } from "./context";
 
 export interface FadeInProps extends Omit<HTMLMotionProps<"div">, "children"> {
@@ -39,11 +39,19 @@ export function FadeIn({
   ...props
 }: FadeInProps) {
   const { isInStagger } = useStagger();
+  const [mounted, setMounted] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const activeYOffset = mounted && shouldReduceMotion ? 0 : yOffset;
 
   return (
     <motion.div
       variants={fadeVariants}
-      custom={{ duration, delay: isInStagger ? 0 : delay, yOffset }}
+      custom={{ duration, delay: isInStagger ? 0 : delay, yOffset: activeYOffset }}
       initial={isInStagger ? undefined : "hidden"}
       whileInView={isInStagger ? undefined : "visible"}
       viewport={isInStagger ? undefined : { once, amount: 0.05, margin: "0px 0px -50px 0px" }}
